@@ -23,7 +23,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <main className=" px-24">{children}</main>
+          <main className=" px-6 md:px-24">{children}</main>
         </ThemeProvider>
       </body>
     </html>
