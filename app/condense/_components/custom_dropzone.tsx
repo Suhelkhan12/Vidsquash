@@ -3,8 +3,6 @@
 import Dropzone from "react-dropzone";
 import { toast } from "sonner";
 import { VideoIcon } from "lucide-react";
-import { Card, CardHeader } from "@/components/ui/card";
-import { useState } from "react";
 
 type CustomDropZoneProps = {
   handleUpload: (files: File) => void;

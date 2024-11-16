@@ -5,6 +5,7 @@ import { acceptedVideoFiles } from "@/utils/format";
 import CustomDropZone from "./custom_dropzone";
 import { FileActions } from "@/utils/types";
 import VideoDisplay from "./video-display";
+import VideoInputDetails from "./video-details";
 
 const CondenseVideo = () => {
   const [video, setVideo] = useState<FileActions | null>(null);
@@ -20,10 +21,15 @@ const CondenseVideo = () => {
     });
   };
 
+  const resetVideoState = () => setVideo(null);
+
   return (
     <>
       {video ? (
-        <VideoDisplay url={URL.createObjectURL(video.file)} />
+        <div className="flex items-start gap-8">
+          <VideoDisplay url={URL.createObjectURL(video.file)} />
+          <VideoInputDetails videoFile={video} onClear={resetVideoState} />
+        </div>
       ) : (
         <CustomDropZone
           handleUpload={handleUpload}

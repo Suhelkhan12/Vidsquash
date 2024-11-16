@@ -14,10 +14,11 @@ const page = () => {
     <section>
       <header className="p-6 md:p-12">
         <h1 className="text-4xl md:text-6xl font-bold text-center">
-          Video Compression Tool
+          Video Compression <span className=" text-primary">Tool</span>
         </h1>
         <p className="mt-4 text-xl text-center">
-          Compress your videos without compromising quality
+          Compress your videos without compromising quality in your browser
+          itself.
         </p>
       </header>
 

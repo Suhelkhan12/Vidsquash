@@ -13,16 +13,14 @@ const CondenseVideoDynamic = dynamic(
 const page = () => {
   return (
     <div className="pt-12">
-      <div className="flex items-start gap-8">
-        <Card className=" max-w-3xl w-full">
-          <CardHeader>
-            <CardTitle className=" text-xl">Place your video here</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CondenseVideoDynamic />
-          </CardContent>
-        </Card>
-      </div>
+      <Card className=" w-full">
+        <CardHeader>
+          <CardTitle className=" text-xl">Place your video here</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CondenseVideoDynamic />
+        </CardContent>
+      </Card>
     </div>
   );
 };

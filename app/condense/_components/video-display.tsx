@@ -2,9 +2,11 @@ import React from "react";
 
 const VideoDisplay = ({ url }: { url: string }) => {
   return (
-    <video id="condense-video-id" controls>
-      <source src={url} type={"video/mp4"} />
-    </video>
+    <div className=" max-w-3xl w-full rounded-md overflow-hidden">
+      <video id="condense-video-id" controls>
+        <source src={url} type={"video/mp4"} />
+      </video>
+    </div>
   );
 };
 
