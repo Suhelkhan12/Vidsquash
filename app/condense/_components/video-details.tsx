@@ -17,6 +17,7 @@ import {
 } from "@/utils/types";
 import { VideoTrim } from "./video-trim";
 import { useState } from "react";
+import EditVideo from "./EditVideo";
 
 type VideoInputDetailsProps = {
   videoFile: FileActions;
@@ -35,15 +36,15 @@ const VideoInputDetails = ({ videoFile, onClear }: VideoInputDetailsProps) => {
   });
 
   return (
-    <div className="flex-grow flex gap-4 flex-col">
+    <div className="flex-grow flex gap-4 flex-col w-full">
       <Card className="bg-secondary">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex justify-between items-center text-xl">
+        <CardHeader className="p-3 pb-0">
+          <CardTitle className="flex justify-between items-center">
             Input File
             <Button onClick={onClear}>Change video</Button>
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-3">
           <CardDescription className="mb-4">
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-4">
@@ -63,14 +64,26 @@ const VideoInputDetails = ({ videoFile, onClear }: VideoInputDetailsProps) => {
         </CardContent>
       </Card>
       <Card className="bg-secondary">
-        <CardHeader className="pb-2">
+        <CardHeader className="p-3 pb-0">
           <CardTitle>Trim video</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-3">
           <VideoTrim
             videoSettings={videoSettings}
             disabled={false}
             onVideoSettingChange={setVideoSettings}
+          />
+        </CardContent>
+      </Card>
+      <Card className="bg-secondary">
+        <CardHeader className="p-3 pb-0">
+          <CardTitle>Edit video detials</CardTitle>
+        </CardHeader>
+        <CardContent className="p-3">
+          <EditVideo
+            videoSettings={videoSettings}
+            onVideoSettingChange={setVideoSettings}
+            disabled={false}
           />
         </CardContent>
       </Card>
