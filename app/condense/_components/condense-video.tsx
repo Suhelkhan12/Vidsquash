@@ -26,7 +26,7 @@ const CondenseVideo = () => {
   return (
     <>
       {video ? (
-        <div className="flex items-start gap-8">
+        <div className="flex lg:flex-row flex-col items-start gap-8">
           <VideoDisplay url={URL.createObjectURL(video.file)} />
           <VideoInputDetails videoFile={video} onClear={resetVideoState} />
         </div>
