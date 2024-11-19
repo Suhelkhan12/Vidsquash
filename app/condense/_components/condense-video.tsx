@@ -1,13 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { acceptedVideoFiles } from "@/utils/format";
 import CustomDropZone from "./custom_dropzone";
 import { FileActions } from "@/utils/types";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { toBlobURL } from "@ffmpeg/util";
 import VideoDisplay from "./video-display";
 import VideoInputDetails from "./video-details";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const CondenseVideo = () => {
   // saving ffmpeg in a ref to persist between renders
@@ -41,6 +43,39 @@ const CondenseVideo = () => {
 
   // starting video compression using ffmpeg
   const disableDuringCompression = status === "condensing";
+
+  // loading ffmpeg functions
+  const load = async () => {
+    const baseUrl = "http://localhost:3000";
+    const ffmpeg = ffmpegRef.current;
+    await ffmpeg.load({
+      coreURL: await toBlobURL(
+        `${baseUrl}/download/ffmpeg-core.js`,
+        "text/javascript"
+      ),
+      wasmURL: await toBlobURL(
+        `${baseUrl}/download/ffmpeg-core.wasm`,
+        "application/wasm"
+      ),
+    });
+  };
+
+  // show toast when ffmpeg files are loaded
+  const loadWithToast = () => {
+    toast.promise(load, {
+      loading: "Downloading necessory packages from ffmpeg for offline use.",
+      success: () => {
+        return "All necessory files are downloaded.";
+      },
+      error: () => {
+        return "Error downloading ffmpeg packages.";
+      },
+    });
+  };
+
+  // showing toasts
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => loadWithToast, []);
 
   return (
     <>
