@@ -1,4 +1,4 @@
-import { getFileExtension } from "./fileChecker";
+import { getFileExtension } from "./fileConverter";
 import { VideoFormat, VideoInpSettings } from "./types";
 
 export const whatsappCompressionCommand = (input: string, output: string) => [

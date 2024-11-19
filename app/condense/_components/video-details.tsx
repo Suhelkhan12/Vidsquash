@@ -9,37 +9,25 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { byteConversion } from "@/utils/format";
-import {
-  FileActions,
-  QualityType,
-  VideoFormat,
-  VideoInpSettings,
-} from "@/utils/types";
+import { FileActions, VideoInpSettings } from "@/utils/types";
 import { VideoTrim } from "./video-trim";
-import { useState } from "react";
 import EditVideo from "./EditVideo";
 
 type VideoInputDetailsProps = {
   videoFile: FileActions;
   onClear: () => void;
   disableControls: boolean;
+  videoSettings: VideoInpSettings;
+  setVideoSettings: React.Dispatch<React.SetStateAction<VideoInpSettings>>;
 };
 
 const VideoInputDetails = ({
   videoFile,
   onClear,
   disableControls,
+  videoSettings,
+  setVideoSettings,
 }: VideoInputDetailsProps) => {
-  const [videoSettings, setVideoSettings] = useState<VideoInpSettings>({
-    quality: QualityType.Low,
-    videoType: VideoFormat.MOV,
-    customEndTime: 0,
-    customStartTime: 0,
-    removeAudio: false,
-    twitterCompressionCommand: false,
-    whatsappCompressionCommand: false,
-  });
-
   return (
     <div className="w-full">
       <div className="flex gap-4 mb-4">
