@@ -1,14 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { acceptedVideoFiles } from "@/utils/format";
 import CustomDropZone from "./custom_dropzone";
 import { FileActions } from "@/utils/types";
+import { FFmpeg } from "@ffmpeg/ffmpeg";
 import VideoDisplay from "./video-display";
 import VideoInputDetails from "./video-details";
+import { Button } from "@/components/ui/button";
 
 const CondenseVideo = () => {
+  // saving ffmpeg in a ref to persist between renders
+  const ffmpegRef = useRef(new FFmpeg());
+
+  // state for uploaded video
   const [video, setVideo] = useState<FileActions | null>(null);
+
+  // states for ffmpeg conversion
+  const [progress, setProgress] = useState<number>(0);
+  const [time, setTime] = useState<{
+    startTime?: number;
+    elapsedTime?: number;
+  }>({ elapsedTime: 0 });
+  const [status, setStatus] = useState<
+    "not started" | "converted" | "condensing"
+  >("not started");
 
   const handleUpload = (file: File) => {
     setVideo({
@@ -23,13 +39,29 @@ const CondenseVideo = () => {
 
   const resetVideoState = () => setVideo(null);
 
+  // starting video compression using ffmpeg
+  const disableDuringCompression = status === "condensing";
+
   return (
     <>
       {video ? (
-        <div className="flex lg:flex-row flex-col items-start gap-8">
-          <VideoDisplay url={URL.createObjectURL(video.file)} />
-          <VideoInputDetails videoFile={video} onClear={resetVideoState} />
-        </div>
+        <>
+          <div className="flex items-start gap-8">
+            <VideoDisplay url={URL.createObjectURL(video.file)} />
+            <VideoInputDetails
+              videoFile={video}
+              onClear={resetVideoState}
+              disableControls={disableDuringCompression}
+            />
+          </div>
+          {(status === "not started" || status === "converted") && (
+            <div className="flex items-center justify-center mt-8">
+              <Button type="button" onClick={() => {}}>
+                Start compression
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <CustomDropZone
           handleUpload={handleUpload}
