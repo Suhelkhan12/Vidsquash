@@ -64,7 +64,7 @@ const CondenseVideo = () => {
   // loading ffmpeg functions
   const load = async () => {
     try {
-      const baseUrl = "http://localhost:3000";
+      const baseUrl = process.env.NEXT_PUBLIC_WEBSITE_URL;
       const ffmpeg = ffmpegRef.current;
       await ffmpeg.load({
         coreURL: await toBlobURL(
