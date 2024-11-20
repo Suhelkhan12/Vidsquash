@@ -3,6 +3,7 @@ import "./globals.css";
 import ThemeProvider from "./theme-provider";
 import Navbar from "@/components/navbar/Navbar";
 import { Toaster } from "sonner";
+import Footer from "@/components/footer/Footer";
 
 export const metadata: Metadata = {
   title: "VidSuash | Efficient video compression tool.",
@@ -24,7 +25,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <main className=" px-6 md:px-24">{children}</main>
+          <main className=" px-6 md:px-24 pb-10">{children}</main>
+          <Footer />
           <Toaster />
         </ThemeProvider>
       </body>

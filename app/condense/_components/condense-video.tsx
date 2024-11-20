@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { convertFile } from "@/utils/fileConverter";
 import { QualityType, VideoFormat, VideoInpSettings } from "@/utils/types";
 import CondenseProgress from "./condense-progress";
+import VideoOutput from "./video-output";
 
 const CondenseVideo = () => {
   // saving ffmpeg in a ref to persist between renders
@@ -62,18 +63,23 @@ const CondenseVideo = () => {
 
   // loading ffmpeg functions
   const load = async () => {
-    const baseUrl = "http://localhost:3000";
-    const ffmpeg = ffmpegRef.current;
-    await ffmpeg.load({
-      coreURL: await toBlobURL(
-        `${baseUrl}/download/ffmpeg-core.js`,
-        "text/javascript"
-      ),
-      wasmURL: await toBlobURL(
-        `${baseUrl}/download/ffmpeg-core.wasm`,
-        "application/wasm"
-      ),
-    });
+    try {
+      const baseUrl = "http://localhost:3000";
+      const ffmpeg = ffmpegRef.current;
+      await ffmpeg.load({
+        coreURL: await toBlobURL(
+          `${baseUrl}/download/ffmpeg-core.js`,
+          "text/javascript"
+        ),
+        wasmURL: await toBlobURL(
+          `${baseUrl}/download/ffmpeg-core.wasm`,
+          "application/wasm"
+        ),
+      });
+    } catch (err) {
+      console.log(err);
+      toast.warning("Error while loading ffmpeg.");
+    }
   };
 
   // show toast when ffmpeg files are loaded
@@ -104,9 +110,11 @@ const CondenseVideo = () => {
         const percentage = progress * 100;
         setProgress(percentage);
       });
+
       ffmpegRef.current.on("log", ({ message }) => {
-        toast.info(message);
+        console.log(message);
       });
+
       const { url, output, outputBlob } = await convertFile(
         ffmpegRef.current,
         video,
@@ -139,7 +147,7 @@ const CondenseVideo = () => {
     <>
       {video ? (
         <>
-          <div className="flex items-start gap-8">
+          <div className="flex lg:flex-row flex-col items-start gap-8">
             <VideoDisplay url={URL.createObjectURL(video.file)} />
             <VideoInputDetails
               videoFile={video}
@@ -154,10 +162,13 @@ const CondenseVideo = () => {
           )}
           {(status === "not started" || status === "converted") && (
             <div className="flex items-center justify-center mt-8">
-              <Button type="button" onClick={() => setStatus("started")}>
+              <Button type="button" onClick={condense}>
                 Start compression
               </Button>
             </div>
+          )}
+          {status === "converted" && video && (
+            <VideoOutput timeTaken={time.elapsedTime} file={video} />
           )}
         </>
       ) : (

@@ -6,7 +6,6 @@ import {
   twitterCompressionCommand,
   whatsappCompressionCommand,
 } from "./ffmpeg-commands";
-import { toast } from "sonner";
 
 export const getFileExtension = (fileName: string) => {
   const regex = /(?:\.([^.]+))?$/;
@@ -31,7 +30,11 @@ export const convertFile = async (
   videoSettings: VideoInpSettings
 ) => {
   const { file, fileName, fileType } = actionFile;
-  const output = removeFileExtension(fileName) + "." + videoSettings.videoType;
+  const output =
+    removeFileExtension(fileName) +
+    "_compressed" +
+    "." +
+    videoSettings.videoType;
   ffmpeg.writeFile(fileName, await fetchFile(file));
   const command = videoSettings.twitterCompressionCommand
     ? twitterCompressionCommand(fileName, output)
@@ -39,14 +42,17 @@ export const convertFile = async (
     ? whatsappCompressionCommand(fileName, output)
     : customVideoCompressionCommand(fileName, output, videoSettings);
 
-  toast.message(command.join(" "), {
-    description: "Running above ffmpeg command.",
-  });
+  console.log(command);
 
   await ffmpeg.exec(command);
   const data = await ffmpeg.readFile(output);
   const blob = new Blob([data], { type: fileType.split("/")[0] });
   const url = URL.createObjectURL(blob);
+  console.log({
+    data,
+    blob,
+    url,
+  });
   return { url, output, outputBlob: blob };
 };
 
