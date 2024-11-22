@@ -14,6 +14,7 @@ import { convertFile } from "@/utils/fileConverter";
 import { QualityType, VideoFormat, VideoInpSettings } from "@/utils/types";
 import CondenseProgress from "./condense-progress";
 import VideoOutput from "./video-output";
+import process from "process";
 
 const CondenseVideo = () => {
   // saving ffmpeg in a ref to persist between renders
@@ -64,8 +65,16 @@ const CondenseVideo = () => {
   // loading ffmpeg functions
   const load = async () => {
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_WEBSITE_URL;
+      let baseUrl = "";
+      if (process.env.NODE_ENV === "development") {
+        baseUrl = process.env.NEXT_PUBLIC_LOCAL_WEBSITE_URL!;
+        console.log(baseUrl);
+      } else {
+        baseUrl = process.env.NEXT_PUBLIC_WEBSITE_URL!;
+        console.log(baseUrl);
+      }
       const ffmpeg = ffmpegRef.current;
+
       await ffmpeg.load({
         coreURL: await toBlobURL(
           `${baseUrl}/download/ffmpeg-core.js`,
@@ -78,7 +87,7 @@ const CondenseVideo = () => {
       });
     } catch (err) {
       console.log(err);
-      toast.warning("Error while loading ffmpeg.");
+      toast.warning("Error while loading ffmpeg data");
     }
   };
 

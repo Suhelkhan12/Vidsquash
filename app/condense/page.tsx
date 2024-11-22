@@ -10,6 +10,7 @@ const CondenseVideoDynamic = dynamic(
     loading: () => <Skeleton />,
   }
 );
+
 const page = () => {
   return (
     <div className="pt-12">
