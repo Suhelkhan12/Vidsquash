@@ -106,7 +106,7 @@ const CondenseVideo = () => {
 
   // showing toasts
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => loadWithToast, []);
+  useEffect(() => loadWithToast(), []);
 
   // function which will compress the file
   const condense = async () => {
