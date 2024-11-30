@@ -15,6 +15,7 @@ const VideoOutput = ({
   file: FileActions;
   timeTaken?: number;
 }) => {
+  console.log(timeTaken);
   const outputVideoSize = blobSize(file.outputBlob);
   const { sizeReduced, percentage } = reducedSizeInPercentage(
     file.fileSize,

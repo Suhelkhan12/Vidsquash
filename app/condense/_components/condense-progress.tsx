@@ -18,7 +18,7 @@ const CondenseProgress = ({
             {progress ? <p>Condensing</p> : <p>Loading Video</p>}{" "}
             <Loader className="animate-spin w-4 h-4" />
           </div>
-          <p className="text-xs">{formatTime(seconds / 1000)}</p>
+          <p className="text-xs">{formatTime(seconds)}</p>
         </div>
         <Progress value={progress} />
       </div>

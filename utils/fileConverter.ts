@@ -56,32 +56,18 @@ export const convertFile = async (
   return { url, output, outputBlob: blob };
 };
 
-export const formatTime = (seconds: number): string => {
-  seconds = Math.round(seconds);
+export const formatTime = (milliseconds: number): string => {
+  const seconds = Math.round(milliseconds / 1000);
 
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = Math.floor(seconds % 60);
+  const remainingSeconds = seconds % 60;
 
-  let formattedTime = "";
+  const parts: string[] = [];
+  if (hours > 0) parts.push(`${hours}hr`);
+  if (minutes > 0) parts.push(`${minutes}min`);
+  if (remainingSeconds > 0 || parts.length === 0)
+    parts.push(`${remainingSeconds}sec`);
 
-  if (hours > 0) {
-    formattedTime += hours + "hr";
-    if (minutes > 0 || remainingSeconds > 0) {
-      formattedTime += " ";
-    }
-  }
-
-  if (minutes > 0) {
-    formattedTime += `${minutes.toString()} min`;
-    if (remainingSeconds > 0) {
-      formattedTime += " ";
-    }
-  }
-
-  if (remainingSeconds > 0 || formattedTime === "") {
-    formattedTime += `${remainingSeconds} sec`;
-  }
-
-  return formattedTime;
+  return parts.join(" ");
 };

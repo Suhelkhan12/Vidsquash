@@ -57,7 +57,14 @@ const CondenseVideo = () => {
     });
   };
 
-  const resetVideoState = () => setVideo(null);
+  const resetVideoState = () => {
+    setVideo(null);
+    setStatus("not started");
+    setTime({
+      startTime: undefined,
+      elapsedTime: 0,
+    });
+  };
 
   // starting video compression using ffmpeg
   const disableDuringCompression = status === "condensing";
@@ -120,10 +127,6 @@ const CondenseVideo = () => {
         setProgress(percentage);
       });
 
-      ffmpegRef.current.on("log", ({ message }) => {
-        console.log(message);
-      });
-
       const { url, output, outputBlob } = await convertFile(
         ffmpegRef.current,
         video,
@@ -152,6 +155,23 @@ const CondenseVideo = () => {
     }
   };
 
+  //useEffect for time intervals in compressing
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (time.startTime) {
+      timer = setInterval(() => {
+        const endTime = new Date();
+        const timeDiff = endTime.getTime() - time.startTime!.getTime();
+        setTime((p) => ({
+          ...p,
+          elapsedTime: timeDiff,
+        }));
+      }, 1000);
+    }
+
+    return () => clearInterval(timer);
+  }, [time.startTime]);
+
   return (
     <>
       {video ? (
@@ -169,7 +189,7 @@ const CondenseVideo = () => {
           {(status === "started" || status === "condensing") && (
             <CondenseProgress progress={progress} seconds={time.elapsedTime!} />
           )}
-          {(status === "not started" || status === "converted") && (
+          {(status === "not started" || status !== "converted") && (
             <div className="flex items-center justify-center mt-8">
               <Button type="button" onClick={condense}>
                 Start compression
